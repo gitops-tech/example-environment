@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: example-application
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: example-application
+    spec:
+      containers:
+      - name: example-application
+        image: gcr.io/gitops-255005/example-application:master-f7517f2
+        ports:
+        - containerPort: 8080
