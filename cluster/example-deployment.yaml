@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: example-application
-        image: gcr.io/gitops-255005/example-application:master-f7517f2
+        image: gcr.io/gitops-255005/example-application:master-5ebae72
         ports:
         - containerPort: 8080
