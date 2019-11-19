@@ -1,0 +1,1 @@
+{"jobID":"a59e3ec5-e7c7-369a-8dd4-c04a211b003e","spec":{"type":"policy","cause":{"Message":"","User":"Florian Beetz \u003cflorian1.beetz@stud.uni-bamberg.de\u003e"},"spec":{"default:deployment/example-application":{"add":{"automated":"true"},"remove":{}}}},"result":null}
