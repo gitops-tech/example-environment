@@ -5,7 +5,7 @@ metadata:
   labels:
     app: example-application
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - port: 8080
   selector:

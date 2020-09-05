@@ -1,0 +1,50 @@
+name: New Application Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        required: true
+      app_repo:
+        required: true
+      image:
+        required: true
+
+
+jobs:
+  update-image-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wrap Input
+        run:  |
+          echo "::set-env name=APP_REPO::${{ github.event.inputs.app_repo }}"
+          echo "::set-env name=TAG_NAME::${{ github.event.inputs.tag_name }}"
+          echo "::set-env name=IMAGE::${{ github.event.inputs.image }}"
+          echo "::set-env name=DEPLOY_FILE_PATH::${{ github.event.inputs.app_repo }}/deployment.yaml"
+      - uses: actions/checkout@v2
+      - uses: azure/setup-kubectl@v1
+        id: install
+      - name: patch deployment manifest
+        run: kubectl patch --filename=${{ env.DEPLOY_FILE_PATH }} --patch='{"spec":{"template":{"spec":{"containers":[{"name":"${{ env.APP_REPO }}","image":"${{ env.IMAGE }}"}]}}}}' --local=true -o yaml > tmp.yaml
+      - name: commit change
+        run: |
+            git config user.name ${{ github.actor }}
+            git config user.email '${{ github.actor }}@users.noreply.github.com'
+            rm -f ${{ env.DEPLOY_FILE_PATH }}
+            mv tmp.yaml ${{ env.DEPLOY_FILE_PATH }}
+            git add ${{ env.DEPLOY_FILE_PATH }}
+            git diff-index --quiet HEAD || git commit -m "Set ${{ env.APP_REPO }} to version ${{ env.TAG_NAME }}"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          commit-message: Update report
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: new_release_${{ env.APP_REPO }}-${{ env.TAG_NAME }}
+          title: 'Set ${{ env.APP_REPO }} to version ${{ env.TAG_NAME }}'
+          body: |
+            This PR was automatically created.
+            Please review and merge to deploy.

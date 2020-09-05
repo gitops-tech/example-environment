@@ -1,12 +1,9 @@
----
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: example-application
-  annotations:
-    fluxcd.io/automated: 'true'
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -14,6 +11,7 @@ spec:
     spec:
       containers:
       - name: example-application
-        image: gcr.io/gitops-255005/example-application:master-5ebae72
+        image: <image-name>:<tag>
         ports:
         - containerPort: 8080
+
