@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: example-application
-
 spec:
   replicas: 1
   selector:
@@ -18,4 +17,3 @@ spec:
         image: <image-name>:<tag>
         ports:
         - containerPort: 8080
-

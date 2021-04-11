@@ -17,11 +17,11 @@ jobs:
 
     steps:
       - name: Wrap Input
-        run:  |
-          echo "::set-env name=APP_REPO::${{ github.event.inputs.app_repo }}"
-          echo "::set-env name=TAG_NAME::${{ github.event.inputs.tag_name }}"
-          echo "::set-env name=IMAGE::${{ github.event.inputs.image }}"
-          echo "::set-env name=DEPLOY_FILE_PATH::${{ github.event.inputs.app_repo }}/deployment.yaml"
+        run: |
+          echo "APP_REPO=${{ github.event.inputs.app_repo }}" >> $GITHUB_ENV
+          echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+          echo "IMAGE=${{ github.event.inputs.image }}" >> $GITHUB_ENV
+          echo "DEPLOY_FILE_PATH=applications/${{ github.event.inputs.app_repo }}/deployment.yaml" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: azure/setup-kubectl@v1
         id: install
