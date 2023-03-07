@@ -23,7 +23,7 @@ jobs:
           echo "IMAGE=${{ github.event.inputs.image }}" >> $GITHUB_ENV
           echo "DEPLOY_FILE_PATH=applications/${{ github.event.inputs.app_repo }}/deployment.yaml" >> $GITHUB_ENV
       - uses: actions/checkout@v2
-      - uses: azure/setup-kubectl@v1
+      - uses: azure/setup-kubectl@v3
         id: install
       - name: patch deployment manifest
         run: kubectl patch --filename=${{ env.DEPLOY_FILE_PATH }} --patch='{"spec":{"template":{"spec":{"containers":[{"name":"${{ env.APP_REPO }}","image":"${{ env.IMAGE }}"}]}}}}' --local=true -o yaml > tmp.yaml
